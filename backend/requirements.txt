@@ -1,0 +1,2 @@
+starlite==1.31.0
+SQLAlchemy==1.4.42

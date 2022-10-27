@@ -1,4 +1,7 @@
-from sqlalchemy import Column, Float, Integer, String
 from sqlalchemy.orm import declarative_base
+
+__all__ = [
+    "Base"
+]
 
 Base = declarative_base()

@@ -1,11 +1,15 @@
 from starlite import Starlite
 from starlite.plugins.sql_alchemy import SQLAlchemyPlugin, SQLAlchemyConfig
 import os
-from routes.v1 import router as v1_router
+import uvicorn
+
+# Routers
+from routes.v0 import router
+# End Routers
 
 app = Starlite(
     route_handlers=[
-        v1_router
+        router
     ],
     plugins=[
         SQLAlchemyPlugin(
@@ -15,3 +19,14 @@ app = Starlite(
         ),
     ],
 )
+for i in app.routes:
+    print(i.path_components)
+
+if __name__ == "__main__":
+    uvicorn.run(
+        app=app,
+        host="0.0.0.0",
+        log_level="debug",
+        port=443,
+        timeout_keep_alive=0,
+    )

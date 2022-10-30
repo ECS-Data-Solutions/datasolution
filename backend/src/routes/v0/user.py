@@ -13,7 +13,7 @@ class UserController(Controller):
             user_id: int,
             db_session: AsyncSession
     ) -> dict:
-        user = await db_session.scalar(select(User).where(User.id == user_id)).one_or_none()
+        user = (await db_session.scalar(select(User).where(User.id == user_id))).one_or_none()
         return {
             "id": user.id,
             "name": user.name,
@@ -28,7 +28,7 @@ class UserController(Controller):
     ) -> dict:
         user = User(**data.dict())
         db_session.add(user)
-        db_session.commit()
+        await db_session.commit()
         return {
             "id": user.id,
             "name": user.name,

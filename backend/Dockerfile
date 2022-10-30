@@ -4,4 +4,4 @@ WORKDIR /app
 COPY . .
 
 RUN pip install .
-CMD ["python", "src/__init__.py"]
+CMD ["python", "src/app.py"]

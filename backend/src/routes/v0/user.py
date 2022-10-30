@@ -1,6 +1,6 @@
 from starlite import Controller, get, post
 from src.models.User import User, CreateUserDTO
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 
 
@@ -8,12 +8,12 @@ class UserController(Controller):
     path = "/user"
 
     @get()
-    def get_user_by_id(
+    async def get_user_by_id(
             self,
             user_id: int,
-            db_session: Session
+            db_session: AsyncSession
     ) -> dict:
-        user = db_session.scalar(select(User).where(User.id == user_id)).one_or_none()
+        user = await db_session.scalar(select(User).where(User.id == user_id)).one_or_none()
         return {
             "id": user.id,
             "name": user.name,
@@ -21,10 +21,10 @@ class UserController(Controller):
         }
 
     @post()
-    def create_user(
+    async def create_user(
             self,
             data: CreateUserDTO,
-            db_session: Session
+            db_session: AsyncSession
     ) -> dict:
         user = User(**data.dict())
         db_session.add(user)

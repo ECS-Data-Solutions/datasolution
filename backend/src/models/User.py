@@ -1,4 +1,4 @@
-from .__init__ import Base
+from .__init__ import Base, dto_factory
 from sqlalchemy import Column, Float, Integer, String
 
 __all__ = ["User"]
@@ -22,3 +22,4 @@ class User(Base):
         }
 
 
+CreateUserDTO = dto_factory("CreateUserDTO", User, exclude=["id"])

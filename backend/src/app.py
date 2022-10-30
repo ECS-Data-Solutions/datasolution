@@ -1,7 +1,6 @@
-from starlite import Starlite
-from starlite.plugins.sql_alchemy import SQLAlchemyPlugin, SQLAlchemyConfig
-import os
+from starlite import Starlite, Provide
 import uvicorn
+from src.plugins import SQLA_PLUG
 
 # Routers
 from routes.v0 import router
@@ -12,11 +11,7 @@ app = Starlite(
         router
     ],
     plugins=[
-        SQLAlchemyPlugin(
-            config=SQLAlchemyConfig(
-                connection_string=os.getenv("SQLA_KEY"), dependency_key="async_session"
-            )
-        ),
+        SQLA_PLUG
     ],
 )
 for i in app.routes:

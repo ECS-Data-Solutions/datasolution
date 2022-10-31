@@ -56,8 +56,8 @@ class UserController(Controller):
     @delete("/logout")
     async def logout(
             self,
-            token: Parameter(header="Authorization"),
-            db_session: AsyncSession
+            db_session: AsyncSession,
+            token=Parameter(header="Authorization")
     ) -> None:
         result = await db_session.scalars(select(AuthToken).where(AuthToken.token == token))
         auth_token = result.one_or_none()

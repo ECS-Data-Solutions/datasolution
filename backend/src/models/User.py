@@ -1,4 +1,4 @@
-from .__init__ import Base, dto_factory
+from src.models import Base, dto_factory
 from sqlalchemy import Column, Float, Integer, String
 
 __all__ = ["User"]

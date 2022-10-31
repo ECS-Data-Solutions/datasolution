@@ -1,8 +1,8 @@
 from starlite import Router
 
 # Router Imports
-from .ping import PingController
-from .user import UserController
+from src.routes.v0.ping import PingController
+from src.routes.v0.user import UserController
 # End Router Imports
 
 __all__ = ["router"]

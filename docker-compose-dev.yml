@@ -14,7 +14,7 @@ services:
     networks:
       - bridge
     environment:
-      SQLA_KEY: "sqlite+aiosqlite:///:memory:"
+      SQLA_KEY: "sqlite+aiosqlite:///test.db"
     restart: unless-stopped
 
 #  frontend:

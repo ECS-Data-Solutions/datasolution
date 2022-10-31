@@ -53,12 +53,12 @@ class UserController(Controller):
     ) -> dict:
         return create_auth_token(data["email"], data["password"], db_session)
 
-    @delete("/logout")
+    @delete("/logout", status_code=200)
     async def logout(
             self,
             db_session: AsyncSession,
-            token=Parameter(header="Authorization")
-    ) -> None:
+            token: str = Parameter(header="Authorization")
+    ) -> dict:
         result = await db_session.scalars(select(AuthToken).where(AuthToken.token == token))
         auth_token = result.one_or_none()
 
@@ -67,3 +67,6 @@ class UserController(Controller):
 
         await db_session.delete(auth_token)
         await db_session.commit()
+        return {
+            "msg": "Logout successful"
+        }

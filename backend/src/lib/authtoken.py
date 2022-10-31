@@ -5,6 +5,7 @@ from src.models.User import User
 from sqlalchemy import select
 from starlite import NotFoundException
 from random import randbytes
+from starlite.exceptions import HTTPException
 
 
 async def create_auth_token(email: str, password: str, db_session: AsyncSession) -> dict:
@@ -16,7 +17,7 @@ async def create_auth_token(email: str, password: str, db_session: AsyncSession)
         raise NotFoundException("User not found")
 
     if user.password != encrypt_password(password):
-        raise NotFoundException("Authentication failed")
+        raise HTTPException("Invalid password", status_code=401)
 
     # Create Auth Token
     auth_dto = CreateAuthTokenDTO(user_id=user.id, token=randbytes(32).hex())

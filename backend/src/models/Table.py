@@ -11,7 +11,7 @@ class Table(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String)
     description = Column(String)
-    cells = relationship("Cell", back_populates="table")
+    cells = relationship("Cell", backref="table")
 
     def __repr__(self) -> dict:
         return {

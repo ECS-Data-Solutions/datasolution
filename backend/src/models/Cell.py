@@ -10,8 +10,7 @@ class Cell(Base):
     id = Column(Integer, primary_key=True)
     description = Column(String)
     value = Column(String)
-    table_id = Column(Integer, ForeignKey("table.id"))
-    table = relationship("Table", back_populates="cells")
+    table_id = Column(Integer, ForeignKey("tables.id"))
 
     def __repr__(self) -> dict:
         return {

@@ -5,6 +5,7 @@ from src.models.Cell import Cell
 
 __all__ = ["Table"]
 
+
 class Table(Base):
     __tablename__ = "tables"
 

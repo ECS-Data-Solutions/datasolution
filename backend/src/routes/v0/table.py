@@ -36,14 +36,23 @@ class TableController(Controller):
             "id": table.id,
             "name": table.name,
             "description": table.description,
+            "cells": table.cells
         }
 
     @get("/list")
     async def get_table_list(
             self,
             db_session: AsyncSession
-    ) -> dict:
-        result = await db_session.scalars(select(Table))
-        table_list = result.all()
+    ) -> list:
+        result = await db_session.execute(select(Table))
+        table_list_pre = result.scalars().all()
+        table_list = []
+
+        for i in table_list_pre:
+            table_list.append({
+                "id": i.id,
+                "name": i.name,
+                "description": i.description,
+            })
 
         return table_list

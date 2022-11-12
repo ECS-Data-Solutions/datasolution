@@ -1,7 +1,9 @@
+from sqlalchemy.orm import selectinload
 from starlite import Controller, get, post, delete, NotFoundException, Parameter
 from src.models.Table import Table, CreateTableDTO
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
+from src.models.Cell import Cell, CreateCellDTO
 
 
 class TableController(Controller):
@@ -26,7 +28,7 @@ class TableController(Controller):
             table_id: int,
             db_session: AsyncSession
     ) -> dict:
-        result = await db_session.scalars(select(Table).where(Table.id == table_id))
+        result = await db_session.scalars(select(Table).where(Table.id == table_id).options(selectinload(Table.cells)))
         table = result.one_or_none()
 
         if table is None:
@@ -56,3 +58,24 @@ class TableController(Controller):
             })
 
         return table_list
+
+    # cells
+
+    @post("/cell")
+    async def create_cell(
+            self,
+            data: CreateCellDTO,
+            db_session: AsyncSession
+    ) -> dict:
+        data = data.dict()
+        tablePre = await db_session.execute(select(Table).where(Table.id == data["table_id"]))
+        table = tablePre.scalars().one_or_none()
+        data.pop("table_id")
+        data["table"] = table
+
+        cell = Cell(**data)
+        db_session.add(cell)
+        await db_session.commit()
+        return {
+            "msg": "Cell created successfully"
+        }

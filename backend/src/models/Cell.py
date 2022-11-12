@@ -8,6 +8,7 @@ __all__ = ["Cell"]
 class Cell(Base):
     __tablename__ = "cells"
     id = Column(Integer, primary_key=True)
+    locator = Column(String)
     description = Column(String)
     value = Column(String)
     table_id = Column(Integer, ForeignKey("tables.id"))
@@ -21,4 +22,4 @@ class Cell(Base):
         }
 
 
-CreateCellDTO = dto_factory("CreateCellDTO", Cell, exclude=["id", "table_id"])
+CreateCellDTO = dto_factory("CreateCellDTO", Cell, exclude=["id"])

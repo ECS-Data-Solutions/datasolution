@@ -9,8 +9,9 @@ class User(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String)
     fullname = Column(String)
-    email = Column(String)
+    email = Column(String, unique=True)
     password = Column(String)
+    permissions = Column(Integer)
 
     def __repr__(self) -> dict:
         return {

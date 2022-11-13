@@ -34,11 +34,21 @@ class TableController(Controller):
         if table is None:
             raise NotFoundException("Table not found")
 
+        # serialize cells
+        cells = []
+        for cell in table.cells:
+            cells.append({
+                "id": cell.id,
+                "locator": cell.locator,
+                "description": cell.description,
+                "value": cell.value,
+            })
+
         return {
             "id": table.id,
             "name": table.name,
             "description": table.description,
-            "cells": table.cells
+            "cells": cells
         }
 
     @get("/list")
@@ -68,8 +78,11 @@ class TableController(Controller):
             db_session: AsyncSession
     ) -> dict:
         data = data.dict()
-        tablePre = await db_session.execute(select(Table).where(Table.id == data["table_id"]))
-        table = tablePre.scalars().one_or_none()
+        result = await db_session.scalars(select(Table).where(Table.id == data["table_id"]).options(selectinload(Table.cells)))
+        table = result.one_or_none()
+
+        if table is None:
+            raise NotFoundException("Table not found")
         data.pop("table_id")
         data["table"] = table
 
